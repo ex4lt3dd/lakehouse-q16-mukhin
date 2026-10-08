@@ -1,4 +1,4 @@
-param([string]$Python = 'python')
+﻿param([string]$Python = 'python')
 $ErrorActionPreference = 'Stop'
 Set-Location (Split-Path $PSScriptRoot -Parent)
 if (-not (Test-Path -LiteralPath '.env')) {

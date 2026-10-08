@@ -1,5 +1,6 @@
 """Подключение BI к Bronze/Gold, SQL Lab и витрина Q16 через API Superset."""
 import http.cookiejar
+from http.client import RemoteDisconnected
 import json
 import time
 import uuid
@@ -30,7 +31,7 @@ def main():
             with opener.open(BASE + "/health", timeout=5) as response:
                 if response.status == 200:
                     break
-        except (HTTPError, URLError, TimeoutError):
+        except (HTTPError, URLError, TimeoutError, RemoteDisconnected):
             pass
         time.sleep(2)
     else:
@@ -74,13 +75,20 @@ def main():
               "order_by_cols": [json.dumps(["supplier_cnt", False]), json.dumps(["brand", True]),
                                 json.dumps(["type", True]), json.dumps(["size", True])],
               "table_timestamp_format": "smart_date", "page_length": 20, "include_search": True}
+    chart_context = {"datasource": {"id": dataset_id, "type": "table"},
+                     "queries": [{"columns": ["brand", "type", "size", "supplier_cnt"],
+                                  "metrics": [], "row_limit": 50000,
+                                  "orderby": [["supplier_cnt", False], ["brand", True], ["type", True], ["size", True]],
+                                  "time_range": "No filter"}],
+                     "result_format": "json", "result_type": "full"}
     if existing:
         chart_id = existing["id"]
-        api(f"/api/v1/chart/{chart_id}", {"params": json.dumps(params, ensure_ascii=False), "query_context_generation": True}, method="PUT")
+        api(f"/api/v1/chart/{chart_id}", {"params": json.dumps(params, ensure_ascii=False),
+                                        "query_context": json.dumps(chart_context)}, method="PUT")
     else:
         chart_id = api("/api/v1/chart/", {"slice_name": title, "viz_type": "table", "datasource_id": dataset_id,
                                          "datasource_type": "table", "params": json.dumps(params, ensure_ascii=False),
-                                         "query_context_generation": True})["id"]
+                                         "query_context": json.dumps(chart_context)})["id"]
     dashboards = api("/api/v1/dashboard/")["result"]
     existing = next((d for d in dashboards if d["slug"] == "mukhin-q16"), None)
     if existing:
@@ -100,12 +108,8 @@ def main():
     }
     api(f"/api/v1/dashboard/{dashboard_id}", {"position_json": json.dumps(positions, ensure_ascii=False),
                                              "json_metadata": json.dumps({"refresh_frequency": 0, "timed_refresh_immune_slices": []})}, method="PUT")
-    chart_data = api("/api/v1/chart/data", {"datasource": {"id": dataset_id, "type": "table"},
-                                          "queries": [{"columns": ["brand", "type", "size", "supplier_cnt"],
-                                                       "metrics": [], "row_limit": 50000,
-                                                       "orderby": [["supplier_cnt", False], ["brand", True], ["type", True], ["size", True]],
-                                                       "time_range": "No filter"}],
-                                          "result_format": "json", "result_type": "full"})
+    stored_chart = api(f"/api/v1/chart/{chart_id}")["result"]
+    chart_data = api("/api/v1/chart/data", json.loads(stored_chart["query_context"]))
     gold_data = chart_data["result"][0]["data"]
     import csv
     with (ROOT / "results/q16-gold.csv").open(encoding="utf-8", newline="") as stream:

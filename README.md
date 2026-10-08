@@ -4,7 +4,7 @@
 
 Репозиторий для сдачи: [ex4lt3dd/lakehouse-q16-mukhin](https://github.com/ex4lt3dd/lakehouse-q16-mukhin).
 
-Основной документ для сдачи — [отчёт](отчет.md). Все числа в нём получены на реально запущенном Docker-стеке; исходные результаты находятся в [results](results/).
+Отчёт — [отчет.md](отчет.md), результаты запросов и замеров — в [results](results/).
 
 ## Стек и поток данных
 
@@ -17,11 +17,11 @@ TPC-H sf1 → Trino → Bronze → Silver → Gold → Superset
                     bronze / silver / gold
 ```
 
-Используются Trino 476, PostgreSQL 17, Lakekeeper, Silo (совместимый форк MinIO из поправки к гайду) и Apache Superset 4.1.2. Каждый слой имеет отдельный бакет, warehouse и каталог Trino. Имена контейнеров и томов начинаются с `mukhin-q16`, что отделяет эту работу от других проектов.
+Стек: Trino 476, PostgreSQL 17, Lakekeeper, Silo и Apache Superset 4.1.2. Silo — S3-совместимый форк MinIO. У каждого слоя отдельный бакет, warehouse и каталог Trino. Контейнеры и тома используют префикс `mukhin-q16`.
 
 ## Запуск на Windows
 
-Нужны работающий Docker Desktop с Linux containers, PowerShell и Python 3.10+. Python-скрипты используют стандартную библиотеку; устанавливать пакеты на хост не требуется.
+Нужны работающий Docker Desktop с Linux containers, PowerShell 5.1 или 7 и Python 3.10+. Python-скрипты используют стандартную библиотеку; устанавливать пакеты на хост не требуется.
 
 Из папки репозитория:
 
@@ -30,7 +30,7 @@ TPC-H sf1 → Trino → Bronze → Silver → Gold → Superset
 ./scripts/run.ps1 -Python python
 ```
 
-На компьютере, где выполнена работа, использовался Python из bundled runtime Codex, переданный через параметр `-Python`. Можно указать абсолютный путь к любому рабочему Python 3.10+.
+Если Python не добавлен в PATH, укажите путь к нему через `-Python`.
 
 `start.ps1` генерирует локальный `.env` со случайными значениями. Существующий `.env` сохраняется. Для повторного запуска только сервисов используйте:
 
@@ -40,7 +40,9 @@ docker compose ps
 python -X utf8 scripts/lab.py validate
 ```
 
-Загрузка данных `build` предназначена для пустого проекта: она останавливается, если Bronze уже создан, чтобы не перезаписать данные. Аналогично benchmark/evolution не следует повторять поверх уже созданных демонстрационных объектов. Для нового полного эксперимента используйте отдельный Docker Compose project и свободные host-порты, а не удаляйте существующие тома.
+`run.ps1` выполняет первый запуск на пустых томах. Если Bronze уже существует, загрузка останавливается. Для проверки готового проекта достаточно `start.ps1`, `lab.py validate` и `setup_superset.py`.
+
+Новый запуск обновляет файлы в `results`. Результат Q16 сохраняется, а время замеров и snapshot ID могут отличаться.
 
 ## Адреса и доступ
 
@@ -55,7 +57,7 @@ python -X utf8 scripts/lab.py validate
 
 Порт 9001 на хосте был занят, поэтому S3 console опубликована на 19001. PostgreSQL доступен только внутри Docker network. Host-порты привязаны к `127.0.0.1`: стек предназначен для локальной практической.
 
-Для DBeaver: новый connection **Trino**, host `localhost`, port `8080`, user `gleb`, пароль пустой; JDBC URL `jdbc:trino://localhost:8080/bronze/lakehouse`. SQL из папки `sql` можно выполнять в DBeaver. Фактически работа выполнена через REST API и консольные скрипты, поэтому дополнительные ручные действия в DBeaver не требуются.
+Для DBeaver: connection **Trino**, host `localhost`, port `8080`, user `gleb`, пароль пустой; JDBC URL `jdbc:trino://localhost:8080/bronze/lakehouse`. SQL находится в папке `sql`; скрипты выполняют его через REST API Trino.
 
 ## SQL и результаты
 
@@ -66,19 +68,20 @@ python -X utf8 scripts/lab.py validate
 | `sql/02-silver.sql` | допустимые поставщики и отфильтрованные связи деталь–поставщик |
 | `sql/03-gold.sql` | агрегат Q16 и явная сортировка при чтении |
 | `sql/q16.sql` | исходный Q16, адаптированный к Bronze |
-| `sql/04-time-travel.sql` | восстановление с фактическим snapshot ID |
+| `sql/04-time-travel.sql` | восстановление из snapshot |
 | `scripts/lab.py` | provisioning, SQL, benchmark, проверки, evolution/time travel |
-| `scripts/setup_superset.py` | BI connections, реальные запросы Bronze, dataset/chart/dashboard Gold |
+| `scripts/setup_superset.py` | подключения BI, запросы Bronze и дашборд Gold |
 | `results/queries.jsonl` | SQL, query IDs и метрики Trino |
 | `results/q16-gold.csv` | полный отсортированный результат Q16 |
 | `results/table-metrics.json` | число строк, файлов, байты и схемы таблиц |
 | `results/benchmark.json`, `benchmark-runs.csv` | методика и каждый прогон GZIP/ZSTD |
-| `results/schema-evolution.json`, `time-travel.json` | доказательства экспериментов |
+| `results/schema-evolution.json`, `time-travel.json` | результаты schema evolution и time travel |
 | `results/validation.json`, `superset.json` | сравнение с TPC-H и ответы BI |
+| `results/reproducibility.json` | проверка запуска чистой копии |
 
-Бенчмарк физически материализует одинаковые таблицы в `bronze.bench_gzip` и `bronze.bench_zstd`. Основной Bronze остаётся неизменным. Это не сравнение времени чтения готового Gold: каждый прогон выполняет полный Q16 с join, фильтрами и `count(DISTINCT)` на Bronze.
+Бенчмарк создаёт одинаковые таблицы в `bronze.bench_gzip` и `bronze.bench_zstd` и выполняет Q16 с join, фильтрами и `count(DISTINCT)`. Основной Bronze сохраняется.
 
-Размер считается по сумме `file_size_in_bytes` из Iceberg `$files`; это активные файлы данных текущего snapshot, без JSON/Avro metadata и старых snapshots. В отчёте используется MiB (`bytes / 1024²`). Время — `elapsedTimeMillis`, измеренное сервером Trino, без старта CLI. Измерения проводятся с прогретым OS cache; сброс Windows/WSL cache не заявляется.
+Размер — сумма `file_size_in_bytes` из Iceberg `$files`, без metadata и старых snapshots. В отчёте используется MiB: `bytes / 1024²`. Время берётся из `elapsedTimeMillis` Trino. Замеры выполняются с прогретым OS cache.
 
 Для остановки с сохранением данных:
 
@@ -86,7 +89,7 @@ python -X utf8 scripts/lab.py validate
 docker compose stop
 ```
 
-`.env`, Docker volumes и бинарные данные не включаются в Git. В репозитории остаются код, заполненный отчёт и подтверждающие результаты.
+`.env` и Docker volumes остаются локально. В репозитории находятся код, отчёт и результаты.
 
 ## Документация
 
@@ -95,4 +98,4 @@ docker compose stop
 - [Lakekeeper bootstrap](https://github.com/lakekeeper/lakekeeper/blob/main/docs/docs/bootstrap.md).
 - [Superset: Trino](https://superset.apache.org/user-docs/databases/supported/trino/).
 
-В предоставленных гайдах использованы настройки Trino 476, поэтому здесь сохранена эта версия и `fs.native-s3.enabled=true`. В новых версиях имя S3-активатора может отличаться; автоматически менять его без обновления Trino нельзя.
+Конфиги рассчитаны на Trino 476 и используют `fs.native-s3.enabled=true`.

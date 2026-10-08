@@ -14,12 +14,12 @@
       "row_count": 200000
     },
     {
-      "table_name": "partsupp",
-      "row_count": 800000
-    },
-    {
       "table_name": "supplier",
       "row_count": 10000
+    },
+    {
+      "table_name": "partsupp",
+      "row_count": 800000
     }
   ],
   "bronze_sample": [

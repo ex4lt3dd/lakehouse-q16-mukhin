@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-08",
+  "source": "https://github.com/ex4lt3dd/lakehouse-q16-mukhin",
+  "base_commit": "f8a13142dd6285455a0c4e9e99784e1e2a06364c",
+  "environment": {
+    "docker_engine": "29.8.0",
+    "python": "3.12.14",
+    "full_run_shell": "PowerShell 7",
+    "restart_shell": "Windows PowerShell 5.1"
+  },
+  "clean_clone": true,
+  "new_credentials": true,
+  "empty_separate_volumes": true,
+  "full_run_exit_code": 0,
+  "full_run_changes": [
+    "Retry RemoteDisconnected while Superset starts"
+  ],
+  "post_run_checks": [
+    "Windows PowerShell 5.1 restart with UTF-8 BOM",
+    "Superset saved query_context full result compared with Gold"
+  ],
+  "q16_rows": 18314,
+  "gold_equals_published_csv": true,
+  "gold_sha256": "245c5ed9cb8ab2813b06075aa60288d3ff8e309b95e501800c7044bdf9147097",
+  "benchmark_runs": 10,
+  "schema_evolution": {
+    "rows": 118274,
+    "null_new_column": 118274,
+    "data_files_unchanged": true,
+    "added": "quality_note",
+    "renamed": "data_note"
+  },
+  "time_travel": {
+    "snapshot_id": 4514626275263610957,
+    "deleted_suppkey": 1,
+    "before": 9996,
+    "after_delete": 9995,
+    "historical": 9996,
+    "restored": 9996
+  },
+  "superset_rows": 18314,
+  "superset_equals_gold": true,
+  "saved_chart_query_verified": true,
+  "fixes": [
+    "Retry RemoteDisconnected while Superset starts",
+    "UTF-8 BOM for Windows PowerShell 5.1 scripts",
+    "Persist and verify Superset chart query_context"
+  ],
+  "checked_script_sha256": {
+    "scripts/start.ps1": "6666e5fb680b952755c2212df9054528508d294b4cb36e0a9b29a37326f787c5",
+    "scripts/run.ps1": "5992b5098c969d067f8555d7eea862f039a36edc8534b5776c4aee2ce246d34f",
+    "scripts/setup_superset.py": "7b8939d8d16fd7c631f2896004e1e0da1b94f41dd14b5c0eb78aab40126dcc4a"
+  }
+}
