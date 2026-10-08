@@ -1,0 +1,7 @@
+{
+  "rows": 118274,
+  "null_new_column": 118274,
+  "data_files_unchanged": true,
+  "added": "quality_note",
+  "renamed": "data_note"
+}

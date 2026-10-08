@@ -1,0 +1,5 @@
+mukhin-q16-trino-1 | trinodb/trino:476 | Up 2 minutes (healthy) | 127.0.0.1:8080->8080/tcp
+mukhin-q16-lakekeeper-1 | quay.io/lakekeeper/catalog:latest-main | Up 2 minutes | 127.0.0.1:8181->8181/tcp
+mukhin-q16-postgres-1 | postgres:17 | Up 2 minutes (healthy) | 5432/tcp
+mukhin-q16-minio-1 | pgsty/silo:latest | Up 2 minutes | 127.0.0.1:9000->9000/tcp, 127.0.0.1:19001->9001/tcp
+mukhin-q16-superset-1 | 63a94035a026 | Up 15 minutes (healthy) | 127.0.0.1:8088->8088/tcp

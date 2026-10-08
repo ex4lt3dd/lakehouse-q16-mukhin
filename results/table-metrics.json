@@ -1,0 +1,170 @@
+[
+  {
+    "table": "bronze.lakehouse.part",
+    "rows": 200000,
+    "files": 1,
+    "bytes": 696560,
+    "MiB": 0.664291,
+    "columns": [
+      [
+        "partkey",
+        "bigint",
+        "",
+        ""
+      ],
+      [
+        "brand",
+        "varchar",
+        "",
+        ""
+      ],
+      [
+        "type",
+        "varchar",
+        "",
+        ""
+      ],
+      [
+        "size",
+        "integer",
+        "",
+        ""
+      ]
+    ]
+  },
+  {
+    "table": "bronze.lakehouse.partsupp",
+    "rows": 800000,
+    "files": 1,
+    "bytes": 2244642,
+    "MiB": 2.140657,
+    "columns": [
+      [
+        "partkey",
+        "bigint",
+        "",
+        ""
+      ],
+      [
+        "suppkey",
+        "bigint",
+        "",
+        ""
+      ]
+    ]
+  },
+  {
+    "table": "bronze.lakehouse.supplier",
+    "rows": 10000,
+    "files": 1,
+    "bytes": 182890,
+    "MiB": 0.174417,
+    "columns": [
+      [
+        "suppkey",
+        "bigint",
+        "",
+        ""
+      ],
+      [
+        "comment",
+        "varchar",
+        "",
+        ""
+      ]
+    ]
+  },
+  {
+    "table": "silver.lakehouse.eligible_supplier",
+    "rows": 9996,
+    "files": 1,
+    "bytes": 16916,
+    "MiB": 0.016132,
+    "columns": [
+      [
+        "suppkey",
+        "bigint",
+        "",
+        ""
+      ]
+    ]
+  },
+  {
+    "table": "silver.lakehouse.part_supplier",
+    "rows": 118274,
+    "files": 1,
+    "bytes": 554625,
+    "MiB": 0.528932,
+    "columns": [
+      [
+        "partkey",
+        "bigint",
+        "",
+        ""
+      ],
+      [
+        "suppkey",
+        "bigint",
+        "",
+        ""
+      ],
+      [
+        "brand",
+        "varchar",
+        "",
+        ""
+      ],
+      [
+        "type",
+        "varchar",
+        "",
+        ""
+      ],
+      [
+        "size",
+        "integer",
+        "",
+        ""
+      ],
+      [
+        "data_note",
+        "varchar",
+        "",
+        ""
+      ]
+    ]
+  },
+  {
+    "table": "gold.lakehouse.q16_supplier_counts",
+    "rows": 18314,
+    "files": 1,
+    "bytes": 41046,
+    "MiB": 0.039145,
+    "columns": [
+      [
+        "brand",
+        "varchar",
+        "",
+        ""
+      ],
+      [
+        "type",
+        "varchar",
+        "",
+        ""
+      ],
+      [
+        "size",
+        "integer",
+        "",
+        ""
+      ],
+      [
+        "supplier_cnt",
+        "bigint",
+        "",
+        ""
+      ]
+    ]
+  }
+]

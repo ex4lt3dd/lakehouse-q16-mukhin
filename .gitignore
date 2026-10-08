@@ -1,0 +1,6 @@
+.env
+catalog/generated/
+__pycache__/
+*.pyc
+.local/
+spark/jars/

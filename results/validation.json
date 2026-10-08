@@ -1,0 +1,27 @@
+{
+  "equal_tpch_bronze_gold": true,
+  "gold_rows": 18314,
+  "sha256": "245c5ed9cb8ab2813b06075aa60288d3ff8e309b95e501800c7044bdf9147097",
+  "keys": [
+    {
+      "table": "part",
+      "rows": 200000,
+      "unique_keys": 200000,
+      "null_keys": 0
+    },
+    {
+      "table": "supplier",
+      "rows": 10000,
+      "unique_keys": 10000,
+      "null_keys": 0
+    }
+  ],
+  "partsupp": [
+    [
+      800000,
+      800000,
+      0
+    ]
+  ],
+  "invalid_silver_suppliers": 0
+}

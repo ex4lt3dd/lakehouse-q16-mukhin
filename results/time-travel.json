@@ -1,0 +1,8 @@
+{
+  "snapshot_id": 3187102991790105271,
+  "deleted_suppkey": 1,
+  "before": 9996,
+  "after_delete": 9995,
+  "historical": 9996,
+  "restored": 9996
+}

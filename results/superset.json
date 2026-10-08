@@ -1,0 +1,89 @@
+{
+  "database_ids": {
+    "bronze": 1,
+    "gold": 2
+  },
+  "dataset_id": 1,
+  "chart_id": 1,
+  "dashboard_id": 1,
+  "dashboard_url": "http://127.0.0.1:8088/superset/dashboard/mukhin-q16/",
+  "bronze_sql": "SELECT 'part' AS table_name,count(*) AS row_count FROM bronze.lakehouse.part UNION ALL SELECT 'partsupp',count(*) FROM bronze.lakehouse.partsupp UNION ALL SELECT 'supplier',count(*) FROM bronze.lakehouse.supplier",
+  "bronze_counts": [
+    {
+      "table_name": "part",
+      "row_count": 200000
+    },
+    {
+      "table_name": "partsupp",
+      "row_count": 800000
+    },
+    {
+      "table_name": "supplier",
+      "row_count": 10000
+    }
+  ],
+  "bronze_sample": [
+    {
+      "partkey": 1,
+      "brand": "Brand#13",
+      "type": "PROMO BURNISHED COPPER",
+      "size": 7
+    },
+    {
+      "partkey": 2,
+      "brand": "Brand#13",
+      "type": "LARGE BRUSHED BRASS",
+      "size": 1
+    },
+    {
+      "partkey": 3,
+      "brand": "Brand#42",
+      "type": "STANDARD POLISHED BRASS",
+      "size": 21
+    },
+    {
+      "partkey": 4,
+      "brand": "Brand#34",
+      "type": "SMALL PLATED BRASS",
+      "size": 14
+    },
+    {
+      "partkey": 5,
+      "brand": "Brand#32",
+      "type": "STANDARD POLISHED TIN",
+      "size": 15
+    },
+    {
+      "partkey": 6,
+      "brand": "Brand#24",
+      "type": "PROMO PLATED STEEL",
+      "size": 4
+    },
+    {
+      "partkey": 7,
+      "brand": "Brand#11",
+      "type": "SMALL PLATED COPPER",
+      "size": 45
+    },
+    {
+      "partkey": 8,
+      "brand": "Brand#44",
+      "type": "PROMO BURNISHED TIN",
+      "size": 41
+    },
+    {
+      "partkey": 9,
+      "brand": "Brand#43",
+      "type": "SMALL BURNISHED STEEL",
+      "size": 12
+    },
+    {
+      "partkey": 10,
+      "brand": "Brand#54",
+      "type": "LARGE BURNISHED STEEL",
+      "size": 44
+    }
+  ],
+  "gold_rows_via_chart_api": 18314,
+  "gold_equals_trino_csv": true
+}

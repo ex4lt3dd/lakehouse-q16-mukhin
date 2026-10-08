@@ -1,0 +1,131 @@
+{
+  "method": "sf1; identical projections; PARQUET; no partitions; 1 warmup + 5 alternating measured Q16 per codec; elapsedTimeMillis from Trino REST; warm OS cache; no concurrent load",
+  "runs": [
+    {
+      "codec": "GZIP",
+      "iteration": 1,
+      "query_id": "20261008_143826_00134_rqke6",
+      "elapsed_ms": 503,
+      "client_seconds": 0.514804
+    },
+    {
+      "codec": "ZSTD",
+      "iteration": 1,
+      "query_id": "20261008_143826_00135_rqke6",
+      "elapsed_ms": 501,
+      "client_seconds": 0.512923
+    },
+    {
+      "codec": "ZSTD",
+      "iteration": 2,
+      "query_id": "20261008_143827_00136_rqke6",
+      "elapsed_ms": 498,
+      "client_seconds": 0.510257
+    },
+    {
+      "codec": "GZIP",
+      "iteration": 2,
+      "query_id": "20261008_143827_00137_rqke6",
+      "elapsed_ms": 401,
+      "client_seconds": 0.412615
+    },
+    {
+      "codec": "GZIP",
+      "iteration": 3,
+      "query_id": "20261008_143828_00138_rqke6",
+      "elapsed_ms": 398,
+      "client_seconds": 0.422542
+    },
+    {
+      "codec": "ZSTD",
+      "iteration": 3,
+      "query_id": "20261008_143828_00139_rqke6",
+      "elapsed_ms": 452,
+      "client_seconds": 0.463196
+    },
+    {
+      "codec": "ZSTD",
+      "iteration": 4,
+      "query_id": "20261008_143829_00140_rqke6",
+      "elapsed_ms": 442,
+      "client_seconds": 0.452958
+    },
+    {
+      "codec": "GZIP",
+      "iteration": 4,
+      "query_id": "20261008_143829_00141_rqke6",
+      "elapsed_ms": 429,
+      "client_seconds": 0.440541
+    },
+    {
+      "codec": "GZIP",
+      "iteration": 5,
+      "query_id": "20261008_143830_00142_rqke6",
+      "elapsed_ms": 387,
+      "client_seconds": 0.39928
+    },
+    {
+      "codec": "ZSTD",
+      "iteration": 5,
+      "query_id": "20261008_143830_00143_rqke6",
+      "elapsed_ms": 392,
+      "client_seconds": 0.4025
+    }
+  ],
+  "writes": [
+    {
+      "codec": "GZIP",
+      "table": "part",
+      "query_id": "20261008_143648_00083_rqke6",
+      "elapsed_ms": 504
+    },
+    {
+      "codec": "GZIP",
+      "table": "partsupp",
+      "query_id": "20261008_143648_00085_rqke6",
+      "elapsed_ms": 569
+    },
+    {
+      "codec": "GZIP",
+      "table": "supplier",
+      "query_id": "20261008_143649_00087_rqke6",
+      "elapsed_ms": 272
+    },
+    {
+      "codec": "ZSTD",
+      "table": "part",
+      "query_id": "20261008_143650_00092_rqke6",
+      "elapsed_ms": 510
+    },
+    {
+      "codec": "ZSTD",
+      "table": "partsupp",
+      "query_id": "20261008_143651_00094_rqke6",
+      "elapsed_ms": 560
+    },
+    {
+      "codec": "ZSTD",
+      "table": "supplier",
+      "query_id": "20261008_143651_00096_rqke6",
+      "elapsed_ms": 276
+    }
+  ],
+  "summary": [
+    {
+      "codec": "GZIP",
+      "bytes": 3166135,
+      "MiB": 3.0194616317749023,
+      "median_ms": 401,
+      "min_ms": 387,
+      "max_ms": 503
+    },
+    {
+      "codec": "ZSTD",
+      "bytes": 3141370,
+      "MiB": 2.9958438873291016,
+      "median_ms": 452,
+      "min_ms": 392,
+      "max_ms": 501
+    }
+  ]
+}
